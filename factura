@@ -1,0 +1,525 @@
+#include <iostream>
+#include <ctime>
+#include <string>
+
+using namespace std;
+
+class Producto{
+    private:
+    string nombre=" ";
+    int precio;
+    int cantidad;
+    int total;
+    public:
+    //getter and setter
+    string getNombreP(){
+        return nombre;
+    }
+    int getPrecioP(){
+        return precio;
+    }
+    int getCantidadP(){
+        return cantidad;
+    }
+    void setNombreP(string nombreP){
+        nombre=nombreP;
+    }
+    void setPrecioP(int precioP){
+        precio=precioP;
+    }
+    void setCantidadP(int cantidadP){
+        cantidad=cantidadP;
+    }
+    int getTotalP(){
+        total=precio*cantidad;
+        return total;
+    }
+};
+class Cliente{
+    private:
+    string codigo;
+    string nombre;
+    string RUC;
+    string direccion;
+    string DNI;
+    Producto producto[50];
+    public:
+    //getter and setter
+    string getNombreC(){
+        return nombre;
+    }
+    void setNombreC(string nombreC){
+        nombre = nombreC;
+    }
+    string getCodigoC(){
+        return codigo;
+    }
+    void setCodigoC(string codigoC){
+        codigo = codigoC;
+    }
+    string getRucC(){
+        return RUC;
+    }
+    void setRucC(string RUCC){
+        RUC = RUCC;
+    }
+    string getDniC(){
+        return DNI;
+    }
+    void setDniC(string DNIC){
+        DNI = DNIC;
+    }
+    string getDireccionC(){
+        return direccion;
+    }
+    void setDireccionC(string direccionC){
+        direccion = direccionC;
+    }
+    //producto
+    void imprimir_producto(){
+        string cadena;
+        string letra;
+        int tamaño;
+        cout << "|                                                         |\n";
+        cout << "|                      PRODUCTOS                          |\n";
+        cout << "| Nombre:                  Precio:  Cantidad:    Total:   |\n";
+        for(int i = 0; i < 50; i++){
+            if(!(producto[i].getNombreP() == " ")){
+                cout << "| " << producto[i].getNombreP();
+                tamaño=producto[i].getNombreP().length();
+                for(int k = tamaño; k < 25 ; k++){
+                    cout << " ";
+                }
+                cout << producto[i].getPrecioP();
+                cadena=to_string(producto[i].getCantidadP());
+                cout << cadena;
+                tamaño=cadena.length();
+                for(int k = tamaño; k < 9 ; k++){
+                    cout << " ";
+                }
+                cout << producto[i].getCantidadP();
+                cadena=to_string(producto[i].getCantidadP());
+                tamaño=cadena.length();
+                for(int k = tamaño; k < 13 ; k++){
+                    cout << " ";
+                }
+                cout << producto[i].getTotalP();
+                cadena=to_string(producto[i].getTotalP());
+                tamaño=cadena.length();
+                for(int k = tamaño; k < 9 ; k++){
+                    cout << " ";
+                }
+                cout << "|\n";
+            }
+        }
+        cout << "|___________________|\n";
+        cout << "para volver escriba cualquier letra";
+        cin >> letra;
+        cout << letra;
+    }
+    void editar_productos(){
+        string nombreP;
+        int precioP;
+        int cantidadP;
+        int num_producto,opcion_editar_producto;
+        cout << "codigo del cliente : " << codigo;
+        for(int i = 0; i < 50; i++){
+            if(!(producto[i].getNombreP() == " ")){
+                cout << "\nproducto [" << i << "]\n";
+                cout << "nombre : " << producto[i].getNombreP() << "\n";
+                cout << "precio : " << producto[i].getPrecioP() << "\n";
+                cout << "cantidad : " << producto[i].getCantidadP() << "\n";
+            }
+        }
+        cout << "\n escoga el numero de producto : ";
+        cin >> num_producto;
+        system("cls");
+        do{
+            cout << "1 = nombre \t 2 = precio \t 3 = cantidad \t 4 = terminar \n";
+            cin >> opcion_editar_producto;
+            switch(opcion_editar_producto){
+                case 1:
+                cout << "escriba el nuevo nombre : ";
+                cin >> nombreP;
+                producto[num_producto].setNombreP(nombreP);
+                opcion_editar_producto = 5;
+                break;
+                case 2:
+                cout << "escriba el nuevo precio : ";
+                cin >> precioP;
+                producto[num_producto].setPrecioP(precioP);
+                opcion_editar_producto = 5;
+                break;
+                case 3:
+                cout << "escriba la nueva cantidad : ";
+                cin >> cantidadP;
+                producto[num_producto].setCantidadP(cantidadP);
+                opcion_editar_producto = 5;
+                break;
+                case 4:
+                opcion_editar_producto = 4;
+                break;
+                default:
+                opcion_editar_producto = 5;
+                cout << "no escogio ninguna de las tres opciones\n";
+                break;
+            }
+        }while(opcion_editar_producto == 5);
+    }
+    void ingresar_productos(){
+        string nombreP;
+        int precioP;
+        int cantidadP;
+        string terminar="no";
+        int i=0;
+        do{
+            system("cls");
+            cout << "ingese el nombre del producto sin espacios en blanco [ " << i << " ] : ";
+            cin >> nombreP;
+            producto[i].setNombreP(nombreP);
+            cout << "ingese el precio del producto [ " << i << " ] : ";
+            cin >> precioP;
+            producto[i].setPrecioP(precioP);
+            cout << "ingese la cantidad del producto [ " << i << " ] : ";
+            cin >> cantidadP;
+            producto[i].setCantidadP(cantidadP);
+            i++;
+            cout << "¿quiere agregar otro producto?\n";
+            cin >> terminar;
+        }while(terminar == "si");
+    }
+};
+string fecha_factura(){
+    time_t tiempoActual = time(0);
+    tm* fechaHoraLocal = localtime(&tiempoActual);
+    int anio = fechaHoraLocal->tm_year + 1900;  // Año actual
+    int mes = fechaHoraLocal->tm_mon + 1;      // Mes actual (0-11)
+    int dia = fechaHoraLocal->tm_mday;         // Día del mes actual
+    string fecha = to_string(dia) + "/" + to_string(mes) + "/" + to_string(anio) ;
+    return fecha;
+}
+void interfaz_principal(){
+    system("cls");
+    cout << "\t\t\t\t\t\t\t\t" << "___________" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         Opciones          |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         1 : Factura       |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         0 : salir         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|_________|" << "\n\n";
+    cout << "\t\t\t\t\t\t\t\t" << "     Elija una opcion : ";
+}
+void interfaz_Factura(){
+    system("cls");
+    cout << "\t\t\t\t\t\t\t\t" << "___________" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|          Factura          |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         1 : crear         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         2 : editar        |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         3 : imprimir      |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         0 : atras         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|_________|" << "\n\n";
+    cout << "\t\t\t\t\t\t\t\t" << "     Elija una opcion : ";
+}
+void interfaz_Factura_Editar(){
+    system("cls");
+    cout << "\t\t\t\t\t\t\t\t" << "___________" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|          Edicion          |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         1 : cliente       |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         2 : producto      |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         0 : atras         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|_________|" << "\n\n";
+    cout << "\t\t\t\t\t\t\t\t" << "     Elija una opcion : ";
+}
+void interfaz_Factura_Editar_Cliente(){
+    system("cls");
+    cout << "\t\t\t\t\t\t\t\t" << "___________" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|           cliente         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         1 : nombre        |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         2 : codigo        |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         3 : DNI           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         4 : Direccion     |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         5 : RUC           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         0 : atras         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|_________|" << "\n\n";
+    cout << "\t\t\t\t\t\t\t\t" << "      Elija una opcion : ";
+}
+void interfaz_Factura_mostrar(){
+    system("cls");
+    cout << "\t\t\t\t\t\t\t\t" << "___________" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         imprecion         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|                           |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         1 : cliente       |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         2 : producto      |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         3 : recibo        |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|         0 : atras         |" << "\n";
+    cout << "\t\t\t\t\t\t\t\t" << "|_________|" << "\n\n";
+    cout << "\t\t\t\t\t\t\t\t" << "      Elija una opcion : ";
+}
+void Factura_editar_cliente(Cliente cliente[50],int num_editar_cliente){
+    string nombre;
+    string codigo;
+    string dni;
+    string direccion;
+    string ruc;
+    int opcion_editar_cliente;
+    do{
+        interfaz_Factura_Editar_Cliente();
+        cin >> opcion_editar_cliente;
+        switch(opcion_editar_cliente){
+            case 1:
+            cout << "Introduza el nuevo nombre del cliente : ";
+            cin >> nombre;
+            cliente[num_editar_cliente].setNombreC(nombre);
+            break;
+            case 2:
+            cout << "Introduza el nuevo codigo del cliente : ";
+            cin >> codigo;
+            cliente[num_editar_cliente].setCodigoC(codigo);
+            break;
+            case 3:
+            cout << "Introduza el nuevo DNI del cliente : ";
+            cin >> dni;
+            cliente[num_editar_cliente].setDniC(dni);
+            break;
+            case 4:
+            cout << "Introduza la nueva direccion del cliente : ";
+            cin >> direccion;
+            cliente[num_editar_cliente].setDireccionC(direccion);
+            break;
+            case 5:
+            cout << "Introduza el nuevo RUC del cliente : ";
+            cin >> ruc;
+            cliente[num_editar_cliente].setRucC(ruc);
+            break;
+            case 0:
+            opcion_editar_cliente = 0;
+            break;
+            default:
+            break;
+        }
+    }while(!(opcion_editar_cliente == 0));
+}
+void opcion_Factura_editar(Cliente cliente[50],int num_editar_cliente){
+    int opcion_factura_crear;
+    do{
+        interfaz_Factura_Editar();
+        cin >> opcion_factura_crear;
+        switch(opcion_factura_crear){
+            case 1:
+            Factura_editar_cliente(cliente,num_editar_cliente);
+            opcion_factura_crear = 3;
+            break;
+            case 2:
+            cliente[num_editar_cliente].editar_productos();
+            opcion_factura_crear = 3;
+            break;
+            case 0:
+            opcion_factura_crear = 0;
+            break;
+            default:
+            opcion_factura_crear = 3;
+            break;
+        }
+
+    }while(!(opcion_factura_crear == 0));
+}
+void imprimir_cliente(Cliente cliente[50],int num_imprimir_cliente){
+    int tamaño;
+    system("cls");
+    cout << "_____________________\n";
+    cout << "|                                      |                  |\n";
+    cout << "|   Nombre : " << cliente[num_imprimir_cliente].getNombreC();
+    tamaño=cliente[num_imprimir_cliente].getNombreC().length();
+    for(int k = tamaño+14; k < 40 ; k++){
+        if(k==39){
+            cout << " | fecha de emision |\n";
+        }else{
+            cout << " ";
+        }
+    }
+    cout << "|   Codigo : " << cliente[num_imprimir_cliente].getCodigoC();
+    tamaño=cliente[num_imprimir_cliente].getCodigoC().length();
+    for(int k = tamaño+14; k < 40 ; k++){
+        if(k==39){
+            cout << " | "<< fecha_factura() <<"        |\n";
+        }else{
+            cout << " ";
+        }
+    }
+    cout << "|   DNI : " << cliente[num_imprimir_cliente].getDniC();
+    tamaño=cliente[num_imprimir_cliente].getDniC().length();
+    for(int k = tamaño+11; k < 40 ; k++){
+        if(k==39){
+            cout << " |______|\n";
+        }else{
+            cout << " ";
+        }
+    }
+    cout << "|   Direccion : " << cliente[num_imprimir_cliente].getDireccionC();
+    tamaño=cliente[num_imprimir_cliente].getDireccionC().length();
+    for(int k = tamaño+17; k < 60 ; k++){
+        if(k==59){
+            cout << "|\n";
+        }else{
+            cout << " ";
+        }
+    }
+    cout << "|   RUC : " << cliente[num_imprimir_cliente].getRucC();
+    tamaño=cliente[num_imprimir_cliente].getRucC().length();
+    for(int k = tamaño+11; k < 60 ; k++){
+        if(k==59){
+            cout << "|\n";
+        }else{
+            cout << " ";
+        }
+    }
+    cout << "|___________________|\n";
+}
+void opcion_Factura_imprimir(Cliente cliente[50],int num_imprimir_cliente){
+    int opcion_factura_crear;
+    string codigo;
+    string letra;
+    do{
+        interfaz_Factura_mostrar();
+        cin >> opcion_factura_crear;
+        switch(opcion_factura_crear){
+            case 1:
+            imprimir_cliente(cliente,num_imprimir_cliente);
+            cout << "para volver escriba cualquier letra";
+            cin >> letra;
+            cout << letra;
+            opcion_factura_crear = 4;
+            break;
+            case 2:
+            system("cls");
+            cout << "_____________________\n";
+            cliente[num_imprimir_cliente].imprimir_producto();
+            cin >> codigo;
+            opcion_factura_crear = 4;
+            break;
+            case 3:
+            imprimir_cliente(cliente,num_imprimir_cliente);
+            cliente[num_imprimir_cliente].imprimir_producto();
+            break;
+            case 0:
+            opcion_factura_crear = 0;
+            break;
+            default:
+            opcion_factura_crear = 4;
+            break;
+        }
+
+    }while(!(opcion_factura_crear == 0));
+}
+void Factura_crear_cliente(Cliente cliente[50],int num_cliente){
+    system("cls");
+    string nombre;
+    string codigo;
+    string dni;
+    string direccion;
+    string ruc;
+    cout << "Ingrese los datos del cliente\n";
+    cout << "Nombre : ";
+    cin >> nombre;
+    cliente[num_cliente].setNombreC(nombre);
+    cout << "Codigo : ";
+    cin >> codigo;
+    cliente[num_cliente].setCodigoC(codigo);
+    cout << "DNI : ";
+    cin >> dni;
+    cliente[num_cliente].setDniC(dni);
+    cout << "Direccion : ";
+    cin >> direccion;
+    cliente[num_cliente].setDireccionC(direccion);
+    cout << "RUC : ";
+    cin >> ruc;
+    cliente[num_cliente].setRucC(ruc);
+}
+void opcion_Factura(Cliente cliente[50],int num_cliente){
+    string codigo_cliente;
+    int num_editar_cliente=-1;
+    int opcion_factura;
+    do{
+        interfaz_Factura();
+        cin >> opcion_factura;
+        switch(opcion_factura){
+            case 1:
+            Factura_crear_cliente(cliente,num_cliente);
+            cliente[num_cliente].ingresar_productos();
+            num_cliente++;
+            opcion_factura = 4;
+            break;
+            case 2:
+            cout << "digite el codigo del cilente a editar \n";
+            do{
+                cin >> codigo_cliente;
+                for(int i = 0; i < 50; i++){
+                    if(codigo_cliente == cliente[i].getCodigoC()){
+                        num_editar_cliente=i;
+                    }
+                }
+                if(num_editar_cliente == -1){
+                    cout << "el codigo que escribio no existe vuele a intentarlo\n";
+                }
+            }while(num_editar_cliente == -1);
+            opcion_Factura_editar(cliente,num_editar_cliente);
+            opcion_factura = 4;
+            break;
+            case 3:
+            cout << "digite el codigo del cilente a imrpimir \n";
+            do{
+                cin >> codigo_cliente;
+                for(int i = 0; i < 50; i++){
+                    if(codigo_cliente == cliente[i].getCodigoC()){
+                        num_editar_cliente=i;
+                    }
+                }
+                if(num_editar_cliente == -1){
+                    cout << "el codigo que escribio no existe vuele a intentarlo\n";
+                }
+            }while(num_editar_cliente == -1);
+            opcion_Factura_imprimir(cliente,num_editar_cliente);
+            opcion_factura = 4;
+            break;
+            case 0:
+            opcion_factura = 0;
+            break;
+            default:
+            opcion_factura = 4;
+            break;
+        }
+
+    }while(!(opcion_factura == 0));
+}
+void opcion_principal(Cliente cliente[50],int num_cliente){
+    int opcion_principal;
+    do{
+        interfaz_principal();
+        cin >> opcion_principal;
+        switch(opcion_principal){
+            case 1:
+            opcion_Factura(cliente,num_cliente);
+            break;
+            case 0:
+            opcion_principal = 0;
+            break;
+            default:
+            opcion_principal = 2;
+            break;
+        }
+    }while(!(opcion_principal == 0));
+}
+int main(){
+    system("cls");
+    int num_cliente = 0;
+    Cliente cliente[50];
+    opcion_principal(cliente,num_cliente);
+    return 0;
+}
